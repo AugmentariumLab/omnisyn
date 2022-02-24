@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154419941-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-154419941-1');
+</script> -->
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap core CSS -->
+  <!-- <link rel="icon" type="image/png" href="images/sphere_tracing.png"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <!-- Custom styles for this template -->
+  <!-- <link href="css/distRenderer.css" rel="stylesheet"> -->
+  <base target="_blank">
+</head>
+
+<title>OmniSyn: Synthesizing 360 Videos with Wide-baseline Panoramas</title>
+
+<body>
+
+  <style>
+    /* Stylesheet for webpages which compare images in multiple directories. */
+
+    @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600,700");
+
+    /* Elements */
+
+    /*body {
+    margin: 0;
+    background-color: #2e2e2e;
+}
+
+h1 {
+    color: #fff;
+    font-family: 'Open Sans', arial, sans-serif;
+}
+h2 {
+    color: #fff;
+    font-family: 'Open Sans', arial, sans-serif;
+}
+h3 {
+    color: #fff;
+    font-family: 'Open Sans', arial, sans-serif;
+}
+
+p {
+    font-family: 'Open Sans', arial, sans-serif;
+}
+
+a {
+  color : #ADD8FF;
+}
+
+td {
+    text-align: center;
+    color: #fff;
+}
+
+td > p {
+    margin-bottom: 5px;
+    margin-top: 0;
+}*/
+
+    /* IDs */
+
+    #images {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      text-align: center;
+      width: 800px;
+    }
+
+    #images>.image_wrapper {
+      display: inline-block;
+      margin: 15px;
+      width: 770px;
+    }
+
+    /* Classes */
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .bottom {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .bottom_circle {
+      z-index: 2;
+    }
+
+    .comparison_table {
+      border: 2px solid #444;
+      margin: 0 auto;
+    }
+
+    .comparison {
+      cursor: pointer;
+    }
+
+    .comparison:hover {
+      box-shadow: 0 0 1px 1px #ddd;
+    }
+
+    .comparisons {
+      height: 82px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .comparisons_menu {
+      height: 30px;
+    }
+
+    .comparisons>ul {
+      padding: 10px;
+    }
+
+    .comparisons>ul li {
+      background-color: #999;
+      border-radius: 7px;
+      color: white;
+      display: inline-block;
+      float: left;
+      font-size: 82.5%;
+      height: 28px;
+      line-height: 1.9;
+      list-style: none;
+      margin: 0 15px 10px 0;
+      padding: 0 12px;
+      text-align: -webkit-match-parent;
+    }
+
+    .comparisons>ul li.top_active,
+    .top_circle {
+      background-color: #4285f4;
+    }
+
+    .comparisons>ul li.bottom_active,
+    .bottom_circle {
+      background-color: #db3236;
+    }
+
+    .header {
+      background: #2e2e2e;
+      border-bottom: 1px solid #e5e5e5;
+      height: 140px;
+      left: 0;
+      position: relative;
+      top: 0;
+      width: 100%;
+    }
+
+    .hover_images .top_image,
+    .bottom_image {
+      width: 770px;
+    }
+
+    .image_wrapper>.hover_images {
+      display: inline-block;
+      position: relative;
+    }
+
+    .linksline {
+      background: #454545;
+      border-bottom: 1px solid #f2f2f2;
+      color: #fff;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 15px;
+      font-weight: bold;
+      min-height: 28px;
+      overflow: hidden;
+      padding: 0 12px;
+      padding-top: 6px;
+      text-align: center;
+    }
+
+    .log_info {
+      font-family: 'Open Sans';
+      color: #fff;
+      margin: 10px auto;
+      width: 1200px;
+      font-size: 12px;
+    }
+
+    .menu {
+      background: #fcfcfc;
+      border-bottom: 1px solid #f2f2f2;
+      color: #444;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      min-height: 28px;
+      overflow: hidden;
+      padding: 0 12px;
+    }
+
+    .menu>ul {
+      -webkit-margin-start: 0;
+      -webkit-margin-end: 0;
+      left: 10%;
+      list-style: none;
+      margin: auto;
+      max-width: 1250px;
+      padding: 0;
+      position: relative;
+    }
+
+    .menu>ul a {
+      display: inline-block;
+      text-decoration: underline;
+    }
+
+    .menu>ul li {
+      color: #444;
+      display: inline-block;
+      float: left;
+      height: 28px;
+      line-height: 2.4;
+      list-style: none;
+      margin: 0 25px 0 0;
+      text-align: -webkit-match-parent;
+    }
+
+    .table_header {
+      background: #454545;
+      color: #fff;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .table_cell_input {
+      width: 100%;
+    }
+
+    .title {
+      left: 10%;
+      position: relative;
+      min-width: 550px;
+      width: 90%;
+    }
+
+    .title>p {
+      border-left: 1px solid #babcc0;
+      color: #fff;
+      display: inline-block;
+      font-family: 'Open Sans', arial, sans-serif;
+      font-size: 2em;
+      margin: 0;
+      margin-top: 10px;
+      padding-left: 20px;
+      vertical-align: top;
+      width: 800px;
+      height: 50px;
+    }
+
+    .top {
+      left: 0;
+      position: relative;
+      top: 0;
+      z-index: 2;
+    }
+
+    .top:hover {
+      opacity: 0;
+    }
+
+    .top_circle .bottom_circle {
+      border-radius: 7.5px;
+      height: 15px;
+      position: absolute;
+      right: 40px;
+      top: 30px;
+      width: 15px;
+    }
+
+    .top_circle {
+      z-index: 4;
+    }
+
+    .paper-grid-container {
+      display: grid;
+      grid-template-columns: auto auto;
+      text-align: center;
+      margin: 0px -10px 0px -10px;
+    }
+
+    .paper-grid-container>div {
+      text-align: center;
+    }
+
+    .footer {
+      width: 100%;
+      height: 65px;
+      float: left;
+      margin-top: 25px;
+    }
+
+    .erp_image {
+      width: 16rem;
+      height: 8rem;
+      object-fit: fill;
+    }
+
+    .paper-thumbnail {
+      width: 16rem;
+    }
+
+    .overlay_image {
+      position: absolute;
+      top: 0;
+      z-index: 1;
+    }
+
+    .img_link {
+      position: relative;
+    }
+  </style>
+
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">OmniSyn: Synthesizing 360 Videos with Wide-baseline Panoramas</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarToggle">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" , target="_self">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#Abstract" , target="_self">Abstract</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#Paper" , target="_self">Paper</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#Results" , target="_self">More Results</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="#Examples" , target="_self">Collected Examples</a>
+          </li_self>
+      </ul>
+    </div>
+  </nav>
+
+  <br><br>
+  <div class="container" style="padding-top: 80px; font-size: 20px">
+    <div align="center">
+      <h1 class="text-center" align="center" style="font-size: 50px">
+        OmniSyn: Synthesizing 360 Videos with Wide-baseline Panoramas
+      </h1><br>
+
+      <br><br>
+    </div>
+  </div><br>
+
+  <!-- Teaser -->
+  <div class="container" style="padding-top: 20px; font-size: 20px">
+    <div align="center">
+      <div class="center">
+        <img class="img-responsive img-rounded" src="figure/teaser.png" style="width:100%" alt="">
+      </div>
+      <br>
+    </div>
+  </div><br>
+
+  <!-- Abstract -->
+  <div class="container">
+    <hr>
+    <br>
+    <center>
+      <h2 id="Abstract" style="padding-top: 80px; margin-top: -80px;">Abstract</h2>
+    </center>
+    <br>
+
+    <p style="font-size: 20px">
+      Immersive maps such as Google Street View and Bing Streetside provide true-to-life views with a massive collection of panoramas. However, these panoramas are only available at sparse intervals along the path they are taken, resulting in visual
+      discontinuities during navigation. Prior art in view synthesis is usually built upon a set of perspective images, a pair of stereoscopic images, or a monocular image, but barely examines wide-baseline panoramas, which are widely adopted in
+      commercial platforms to optimize bandwidth and storage usage. In this paper, we leverage the unique characteristics of wide-baseline panoramas and present OmniSyn, a novel pipeline for 360° view synthesis between wide-baseline panoramas.
+      OmniSyn predicts omnidirectional depth maps using a spherical cost volume and a monocular skip, renders meshes in 360° images, and synthesizes intermediate views with a fusion network. We demonstrate the effectiveness of OmniSyn via
+      comprehensive experimental results including comparison with the state-of-the-art methods on CARLA and Matterport datasets, ablation studies, and generalization studies on street views. We envision our work may inspire future research for this
+      unheeded real-world task and eventually produce a smoother experience for navigating immersive maps.
+    </p>
+  </div><br>
+
+  <!-- Paper -->
+  <div class='container'>
+    <hr>
+    <br>
+    <center>
+      <h2 id="Paper" style="padding-top: 80px; margin-top: -80px">Paper</h2>
+    </center>
+    <br>
+    <div class="paper">
+      <div class="paper-grid-container">
+        <div class="item1"><a href="figure/VR2022_OmniSyn_Poster.pdf">
+          <img src="figure/vr-1.png" class="paper-thumbnail"><br>
+          2-page Abstract
+        </a></div>
+        <div class="item1"><a href="https://arxiv.org/abs/2202.08752">
+          <img src="figure/arxiv-01.png" class="paper-thumbnail"><br>
+          Manuscript
+        </a></div>
+      </div>
+    </div>
+  </div>
+    <!-- <center>
+      <h2 id="Supplementary" style="padding-top: 80px; margin-top: -80px">Supplementary</h2>
+    </center>
+    <br>
+    -->
+    <!-- <div class='container' style="width: 60%">
+    <ul>
+    </ul>
+    </div>
+    </div> -->
+    <!-- <br> -->
+
+    <!-- Result -->
+    <!-- <div class='video'> -->
+      <!-- <hr> -->
+      <!-- <br> -->
+      <!-- <center>
+        <h2 id="Results" style="padding-top: 80px; margin-top: -80px">More Results</h2>
+        <br>
+        <p style="font-size: 20px">3D photo results. Download video (56M) <a href="readme_files/Du2Net.mp4">here</a>.</p>
+        <div class="opacity-off">
+        <iframe width='1000px' height='575px' src="https://www.youtube.com/embed/YbjqjaM3NO4" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </center> -->
+    <!-- </div><br> -->
+
+    <!-- Examples -->
+    <div class='container'>
+      <hr>
+      <br>
+      <center>
+        <h2 id="Examples" style="padding-top: 80px; margin-top: -80px">Collected Examples</h2>
+        <br>
+
+        <table class="comparison_table" border="1px" cellspacing="3">
+          <tr class="table_header">
+            <td align="center">
+              <p>Ground Truth 0</p>
+            </td>
+            <td align="center">
+              <p>Ground Truth 1 (6 meters)</p>
+            </td>
+            <td align="center">
+              <p>OmniSyn (Mesh) Output</p>
+            </td>
+          </tr>
+          <tr>
+            <td> <a> <img src="readme_files/input0/4.png" class="erp_image" draggable="false"> </a> </td>
+            <td> <a> <img src="readme_files/input1/4.png" class="erp_image" draggable="false" /> </a> </td>
+            <td class="img_link"> <a> <img src="readme_files/omnisyn/4.gif" class="erp_image" draggable="false" /> </a> </td>
+          </tr>
+          <tr>
+            <td> <a> <img src="readme_files/input0/5.png" class="erp_image" draggable="false"> </a> </td>
+            <td> <a> <img src="readme_files/input1/5.png" class="erp_image" draggable="false" /> </a> </td>
+            <td class="img_link"> <a> <img src="readme_files/omnisyn/5.gif" class="erp_image" draggable="false" /> </a> </td>
+          </tr>
+          <tr>
+            <td> <a> <img src="readme_files/input0/1.png" class="erp_image" draggable="false"> </a> </td>
+            <td> <a> <img src="readme_files/input1/1.png" class="erp_image" draggable="false" /> </a> </td>
+            <td class="img_link"> <a> <img src="readme_files/omnisyn/1.gif" class="erp_image" draggable="false" /> </a> </td>
+          </tr>
+          <tr>
+            <td> <a> <img src="readme_files/input0/2.png" class="erp_image" draggable="false"> </a> </td>
+            <td> <a> <img src="readme_files/input1/2.png" class="erp_image" draggable="false" /> </a> </td>
+            <td class="img_link"> <a> <img src="readme_files/omnisyn/2.gif" class="erp_image" draggable="false" /> </a> </td>
+          </tr>
+          <tr>
+            <td> <a> <img src="readme_files/input0/3.png" class="erp_image" draggable="false"> </a> </td>
+            <td> <a> <img src="readme_files/input1/3.png" class="erp_image" draggable="false" /> </a> </td>
+            <td class="img_link"> <a> <img src="readme_files/omnisyn/3.gif" class="erp_image" draggable="false" /> </a> </td>
+          </tr>
+          <tr>
+            <td> <a> <img src="readme_files/input0/6.png" class="erp_image" draggable="false"> </a> </td>
+            <td> <a> <img src="readme_files/input1/6.png" class="erp_image" draggable="false" /> </a> </td>
+            <td class="img_link"> <a> <img src="readme_files/omnisyn/6.gif" class="erp_image" draggable="false" /> </a> </td>
+          </tr>
+        </table>
+      </center>
+    </div>
+    <hr>
+  </div><br>
+
+  <hr>
+
+  <!-- Bootstrap core JavaScript -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>
+
+</html>
