@@ -19,20 +19,21 @@ def parse_training_options():
                                'eval_inpainting_testset',
                                'eval_depth_test',
                                'dump_examples',
-                               'train',],
+                               'train',
+                               'run_example',],
                       required=True)
   parser.add_argument(
     '--gsv-path',
     type=str,
     help='path to GSV',
     default=
-    "../gsv_umd_june_22_2020")
+    "")
   parser.add_argument(
     '--carla-path',
     type=str,
     help='path to carla',
     default=
-    "../run_carla_2020_07_16/")
+    "")
   parser.add_argument('--model-name',
                       type=str,
                       choices=['\'\''],

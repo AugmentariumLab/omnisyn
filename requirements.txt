@@ -2,3 +2,10 @@ tensorboard
 pyproj
 configargparse
 matplotlib
+distro
+progress
+tqdm
+scipy
+gym==0.10.5
+git+https://github.com/facebookresearch/habitat-lab.git@v0.1.7
+git+https://github.com/facebookresearch/pytorch3d.git@v0.2.5

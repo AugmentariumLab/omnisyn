@@ -12,6 +12,7 @@ from progress.bar import Bar
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 from data_readers.carla_reader import CarlaReader
 from data_readers.gsv_reader import GSVReader
@@ -101,7 +102,9 @@ class App:
       elif args.script_mode == 'train_monocular':
         self.train_monocular()
       elif args.script_mode == 'dump_examples':
-        self.dump_examples()
+        self.dump_examples()  
+      elif args.script_mode == 'run_example':
+        self.run_example()
       else:
         raise ValueError("Unknown script mode" + str(args.script_mode))
     except KeyboardInterrupt:
@@ -292,43 +295,44 @@ class App:
     else:
       raise ValueError("Unknown dataset: %d" % args.dataset)
 
-    # Load a single batch of validation data.
-    # val_data_indices = [20, 40, 60, 80, 100]
-    val_data_indices = [20, 40, 60, 80]
-    if args.script_mode == 'train_monocular':
-      val_data_indices = [20, 40, 100, 200]
-    val_data_all = tuple(val_data[i] for i in val_data_indices)
-    input_panos_val = np.stack(tuple(
-      val_data["rgb_panos"] for val_data in val_data_all),
-      axis=0)
-    input_panos_val = torch.tensor(input_panos_val,
-                                   dtype=torch.float32,
-                                   device=args.device)
-    input_rots_val = np.stack(
-      tuple(val_data["rots"] for val_data in val_data_all),
-      axis=0)
-    input_rots_val = torch.tensor(input_rots_val,
-                                  dtype=torch.float32,
-                                  device=args.device)
-    input_trans_val = np.stack(tuple(
-      val_data["trans"] for val_data in val_data_all),
-      axis=0)
-    input_trans_val = torch.tensor(input_trans_val,
-                                   dtype=torch.float32,
-                                   device=args.device)
-    input_depths_val = np.stack(tuple(
-      val_data["depth_panos"] for val_data in val_data_all),
-      axis=0)
-    input_depths_val = torch.tensor(input_depths_val,
+    if args.dataset != "carla" or (args.dataset == "carla" and args.carla_path):
+      # Load a single batch of validation data.
+      # val_data_indices = [20, 40, 60, 80, 100]
+      val_data_indices = [20, 40, 60, 80]
+      if args.script_mode == 'train_monocular':
+        val_data_indices = [20, 40, 100, 200]
+      val_data_all = tuple(val_data[i] for i in val_data_indices)
+      input_panos_val = np.stack(tuple(
+        val_data["rgb_panos"] for val_data in val_data_all),
+        axis=0)
+      input_panos_val = torch.tensor(input_panos_val,
                                     dtype=torch.float32,
                                     device=args.device)
+      input_rots_val = np.stack(
+        tuple(val_data["rots"] for val_data in val_data_all),
+        axis=0)
+      input_rots_val = torch.tensor(input_rots_val,
+                                    dtype=torch.float32,
+                                    device=args.device)
+      input_trans_val = np.stack(tuple(
+        val_data["trans"] for val_data in val_data_all),
+        axis=0)
+      input_trans_val = torch.tensor(input_trans_val,
+                                    dtype=torch.float32,
+                                    device=args.device)
+      input_depths_val = np.stack(tuple(
+        val_data["depth_panos"] for val_data in val_data_all),
+        axis=0)
+      input_depths_val = torch.tensor(input_depths_val,
+                                      dtype=torch.float32,
+                                      device=args.device)
 
-    self.val_data = val_data
-    self.val_data_indices = val_data_indices
-    self.input_panos_val = input_panos_val
-    self.input_depths_val = input_depths_val
-    self.input_rots_val = input_rots_val
-    self.input_trans_val = input_trans_val
+      self.val_data = val_data
+      self.val_data_indices = val_data_indices
+      self.input_panos_val = input_panos_val
+      self.input_depths_val = input_depths_val
+      self.input_rots_val = input_rots_val
+      self.input_trans_val = input_trans_val
 
   def run_inpainting_mesh_carla(self, step, panos, rots, trans, depths):
     """Does a single run.
@@ -1611,6 +1615,54 @@ class App:
           wspsnr_arr.append(wspsnr_vals.detach().cpu().numpy())
         bar.next(n=args.batch_size)
 
+  def run_example(self):
+    args = self.args
+    depth_model = self.depth_model
+    inpainting_model = self.inpainting_model
+
+    depth_model.eval()
+    inpainting_model.eval()
+    assert args.dataset == "carla"
+
+    inputs_dir = "example/inputs"
+    input_pano0 = plt.imread(os.path.join(inputs_dir, "0.png"))[:,:,:3]
+    input_pano5 = plt.imread(os.path.join(inputs_dir, "5.png"))[:,:,:3]
+    rotations_np = np.load(os.path.join(inputs_dir, "rotations.npy"))
+    translations_np = np.load(os.path.join(inputs_dir, "translations.npy"))
+
+    panos = torch.tensor(np.stack((
+      input_pano0,
+      input_pano0,
+      input_pano0,
+      input_pano0,
+      input_pano0,
+      input_pano5
+    )), device=args.device, dtype=torch.float32)[None]
+    rotations = torch.tensor(rotations_np, device=args.device,
+                              dtype=torch.float32)[None]
+    translations = torch.tensor(translations_np, device=args.device,
+                                dtype=torch.float32)[None]
+    depths = 0.0 * panos[:, :, :, :, 0]
+
+
+    assert args.use_pred_depth, "Not using predicted depth"
+    output_dir = my_helpers.join_and_make("example/outputs")
+
+    dataset = CarlaReader("")
+
+    for i in range(1, 5):
+      indices = [0, i, 5]
+      run_outputs = self.run_inpainting_mesh_carla(
+        100000,
+        panos[:, indices],
+        rotations[:, indices],
+        translations[:, indices] - translations[:, i, None],
+        depths[:, indices]
+      )
+      inpainted_image = run_outputs['inpainted_image']
+      my_torch_helpers.save_torch_image(
+          os.path.join(output_dir, "pred_%d.png" % i),
+          inpainted_image)
 
 if __name__ == "__main__":
   app = App()

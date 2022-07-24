@@ -66,7 +66,7 @@ class CarlaReader(Dataset):
     self.sampling_method = sampling_method
     self.verbose = verbose
     self.return_path = return_path
-    print("Carla dist: [%f, %f]" % (min_dist, max_dist))
+    print("Carla dist: [%f, %f]" % (min_dist, max_dist if max_dist else min_dist))
 
     self.depth_to_dist_cache = {}
     self.geod = pyproj.Geod(ellps="WGS84")
@@ -74,35 +74,36 @@ class CarlaReader(Dataset):
     if sampling_method not in ['sparse', 'dense', 'custom']:
       raise ValueError('Invalid sampling method')
 
-    if sampling_method == "sparse":
-      raw_paths, pano_metadata = self.do_sparse_sampling(towns=towns,
-                                                         data_path=data_path,
-                                                         min_dist=min_dist,
-                                                         max_dist=max_dist)
-      self.restrided_paths = self.generate_subsequences(raw_paths, seq_len)
-      self.pano_metadata = pano_metadata
-    elif sampling_method == "dense":
-      restrided_paths, pano_metadata = self.do_dense_sampling(
-        towns=towns,
-        data_path=data_path,
-        min_dist=min_dist,
-        max_dist=max_dist,
-        seq_len=seq_len)
-      self.restrided_paths = restrided_paths
-      self.pano_metadata = pano_metadata
-    else:
-      restrided_paths, pano_metadata = self.load_custom_sequence(
-        town=custom_params['town'],
-        run_id=custom_params['run_id'],
-        data_path=data_path,
-        start_frame=custom_params['start_frame'],
-        distance=custom_params['distance'],
-        seq_len=seq_len)
-      self.restrided_paths = restrided_paths
-      self.pano_metadata = pano_metadata
-    if verbose:
-      print("Sampling method", sampling_method)
-      print("Restrided paths shape", self.restrided_paths.shape)
+    if data_path != "":
+      if sampling_method == "sparse":
+        raw_paths, pano_metadata = self.do_sparse_sampling(towns=towns,
+                                                          data_path=data_path,
+                                                          min_dist=min_dist,
+                                                          max_dist=max_dist)
+        self.restrided_paths = self.generate_subsequences(raw_paths, seq_len)
+        self.pano_metadata = pano_metadata
+      elif sampling_method == "dense":
+        restrided_paths, pano_metadata = self.do_dense_sampling(
+          towns=towns,
+          data_path=data_path,
+          min_dist=min_dist,
+          max_dist=max_dist,
+          seq_len=seq_len)
+        self.restrided_paths = restrided_paths
+        self.pano_metadata = pano_metadata
+      else:
+        restrided_paths, pano_metadata = self.load_custom_sequence(
+          town=custom_params['town'],
+          run_id=custom_params['run_id'],
+          data_path=data_path,
+          start_frame=custom_params['start_frame'],
+          distance=custom_params['distance'],
+          seq_len=seq_len)
+        self.restrided_paths = restrided_paths
+        self.pano_metadata = pano_metadata
+      if verbose:
+        print("Sampling method", sampling_method)
+        print("Restrided paths shape", self.restrided_paths.shape)
 
   def do_dense_sampling(self, towns, data_path, min_dist, max_dist, seq_len):
     """Performs a dense sampling of tuples where images are min_dist to max_dist
