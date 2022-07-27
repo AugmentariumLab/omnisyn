@@ -347,7 +347,7 @@ class HabitatImageGenerator(torch.utils.data.Dataset):
     opts.test_data_path = (
       "./data_readers/scene_episodes/mp3d_test/dataset_one_ep_per_scene.json.gz"
     )
-    opts.scenes_dir = "../../matterport3d/mp3d_habitat"  # this should store mp3d
+    opts.scenes_dir = "../matterport3d/mp3d_habitat"  # this should store mp3d
 
     self.opts = opts
 
