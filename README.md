@@ -11,7 +11,7 @@ OmniSyn predicts depth from two panoramas and then renders meshes using PyTorch3
     conda activate omnisyn
     conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
     pip install -r requirements.txt
-    conda install habitat-sim withbullet headless -c conda-forge -c aihabitat
+    conda install habitat-sim=0.1.6 headless -c conda-forge -c aihabitat
     ```
 2. Download [our processed CARLA dataset](https://drive.google.com/drive/folders/1UXzWGIpEPlLVhf9t0LJ0VPiAq7wYpudC?usp=sharing).
 
