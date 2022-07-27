@@ -23,3 +23,6 @@ OmniSyn predicts depth from two panoramas and then renders meshes using PyTorch3
 Currently, the main scripts are:
 * `train_depth.py` which trains the depth estimator only.
 * `train_inpainting.py` to train the inpainting component.
+
+# Acknowledgements
+Some code in this repo is borrowed from [facebookresearch/synsin](https://github.com/facebookresearch/synsin) and [nianticlabs/monodepth2](https://github.com/nianticlabs/monodepth2).
