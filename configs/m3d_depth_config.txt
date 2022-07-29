@@ -1,5 +1,5 @@
 script-mode=train_depth_pose
-model-name=''
+model-name="''"
 checkpoints-dir=runs/run_m3d_depth
 batch-size=4
 epochs=9999999
@@ -15,8 +15,6 @@ checkpoint-count=3
 point-radius=0.01
 device=cuda
 verbose=true
-alignment-use-xyz=True
-offset-loss-factor=5
 inpaint-use-residual=False
 inpaint-wrap-padding=True
 inpaint-use-batchnorm=True
