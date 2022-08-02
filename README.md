@@ -24,5 +24,5 @@ Currently, the main scripts are:
 * `train_depth.py` which trains the depth estimator only.
 * `train_inpainting.py` to train the inpainting component.
 
-# Acknowledgements
+## Acknowledgements
 Some code in this repo is borrowed from [facebookresearch/synsin](https://github.com/facebookresearch/synsin) and [nianticlabs/monodepth2](https://github.com/nianticlabs/monodepth2).
