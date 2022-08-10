@@ -105,6 +105,8 @@ class App:
         self.dump_examples()  
       elif args.script_mode == 'run_example':
         self.run_example()
+      elif args.script_mode == 'visualize_point_cloud':
+        self.visualize_point_cloud()
       else:
         raise ValueError("Unknown script mode" + str(args.script_mode))
     except KeyboardInterrupt:
@@ -280,7 +282,7 @@ class App:
         interpolation_mode=args.interpolation_mode)
     elif args.dataset == "m3d":
       split = 'val'
-      if args.script_mode in ['eval_inpainting_testset', 'dump_examples']:
+      if args.script_mode in ['eval_inpainting_testset', 'dump_examples', 'visualize_point_cloud']:
         split = 'test'
       val_data = HabitatImageGenerator(
         split,
@@ -1663,6 +1665,85 @@ class App:
       my_torch_helpers.save_torch_image(
           os.path.join(output_dir, "pred_%d.png" % i),
           inpainted_image)
+
+  def visualize_point_cloud(self):
+    import open3d as o3d
+    args = self.args
+    device = args.device
+    dtype = torch.float32
+    val_dataloader = DataLoader(self.val_data,
+                            batch_size=1,
+                            shuffle=False,
+                            num_workers=0 if args.dataset == 'm3d' else 4)
+    self.depth_model.eval()
+    with torch.no_grad():
+      it = iter(val_dataloader)
+      data = it.next()
+      panos = data["rgb_panos"].to(args.device)
+      depths = data["depth_panos"].to(args.device)
+      rots = data["rots"].to(args.device)
+      trans = data["trans"].to(args.device)
+
+      _, seq_len, panos_height, panos_width, _ = panos.shape
+      panos_small = panos.reshape(
+        (1 * seq_len, panos_height, panos_width, 3))
+      panos_small = my_torch_helpers.resize_torch_images(
+        panos_small, (args.width, args.height), mode=args.interpolation_mode)
+      panos_small = panos_small.reshape(1, seq_len, args.height, args.width, 3)
+
+      visualize_using_gt_depth = False
+      if visualize_using_gt_depth:
+        depths_small = depths.reshape(
+          (1 * seq_len, panos_height, panos_width, 1))
+        depths_small = my_torch_helpers.resize_torch_images(
+          depths_small, (args.width, args.height), mode=args.interpolation_mode)
+        depths_small = depths_small.reshape(1, seq_len, args.height, args.width)
+
+        depth0 = depths_small[0,0]
+        depth2 = depths_small[0,2]
+      else:
+        outputs0 = self.depth_model.estimate_depth_using_cost_volume(
+          panos_small[:, [2, 0], :, :, :],
+          rots[:, [2, 0]],
+          trans[:, [2, 0]],
+          min_depth=args.min_depth,
+          max_depth=args.max_depth)
+        
+        outputs2 = self.depth_model.estimate_depth_using_cost_volume(
+          panos_small[:, [0, 2], :, :, :],
+          rots[:, [0, 2]],
+          trans[:, [0, 2]],
+          min_depth=args.min_depth,
+          max_depth=args.max_depth)
+        depth0 = outputs0["depth"][0, :, :, 0]
+        depth2 = outputs2["depth"][0, :, :, 0]
+
+
+      height, width = depth0.shape
+
+      phi = torch.arange(0, height, device=device, dtype=dtype)
+      phi = (phi + 0.5) * (np.pi / height)
+      theta = torch.arange(0, width, device=device, dtype=dtype)
+      theta = (theta + 0.5) * (2 * np.pi / width) + np.pi / 2
+      phi, theta = torch.meshgrid(phi, theta)
+
+      pano_0_positions = my_torch_helpers.spherical_to_cartesian(theta, phi, depth0)
+      pano_0_positions = pano_0_positions.reshape(height * width, 3) - trans[0, 0][None]
+      pano_0_positions = pano_0_positions.cpu().numpy()
+      pano_0_colors = panos_small[0, 1].reshape(height * width, 3).cpu().numpy()
+      point_cloud_0 = o3d.geometry.PointCloud()
+      point_cloud_0.points = o3d.utility.Vector3dVector(pano_0_positions)
+      point_cloud_0.colors = o3d.utility.Vector3dVector(pano_0_colors)
+
+      pano_1_positions = my_torch_helpers.spherical_to_cartesian(theta, phi, depth2)
+      pano_1_positions = pano_1_positions.reshape(height * width, 3) - trans[0, 2][None]
+      pano_1_positions = pano_1_positions.cpu().numpy()
+      pano_1_colors = panos_small[0, 2].reshape(height * width, 3).cpu().numpy()
+      point_cloud_1 = o3d.geometry.PointCloud()
+      point_cloud_1.points = o3d.utility.Vector3dVector(pano_1_positions)
+      point_cloud_1.colors = o3d.utility.Vector3dVector(pano_1_colors)
+
+      o3d.visualization.draw_geometries([point_cloud_0, point_cloud_1])
 
 if __name__ == "__main__":
   app = App()

@@ -143,3 +143,5 @@ data/
 example/outputs/
 example/depth_model/
 example/inpainting_model/
+example/m3d_depth_model/
+example/m3d_inpainting_model/

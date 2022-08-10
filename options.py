@@ -20,7 +20,8 @@ def parse_training_options():
                                'eval_depth_test',
                                'dump_examples',
                                'train',
-                               'run_example',],
+                               'run_example',
+                               'visualize_point_cloud'],
                       required=True)
   parser.add_argument(
     '--gsv-path',
