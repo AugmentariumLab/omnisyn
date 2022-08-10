@@ -1264,7 +1264,9 @@ class FullPipeline(nn.Module):
     trans_norm = torch.norm(trans[:, 0] - trans[:, 1], dim=1)
     rectified_panos, rect_rots = self.rectify_images(panos, rots, trans,
                                                      rectify_vertical=False)
-
+    # print("rectified_panos.shape", rectified_panos.shape)
+    # my_torch_helpers.save_torch_image("rectified0.png", rectified_panos[0])
+    # my_torch_helpers.save_torch_image("rectified1.png", rectified_panos[0,1:])
     # print("Trans", trans)
     # print("Trans norm", trans_norm)
     # cost_volume = self.calculate_cost_volume_erp(
@@ -1274,7 +1276,7 @@ class FullPipeline(nn.Module):
     #   cost_type='abs_diff')
     # for i in range(cost_volume.shape[1]):
     #   my_torch_helpers.save_torch_image("test/cv/%d.png" % i, cost_volume[:,i])
-    # exit(0)
+    # # exit(0)
 
     # Change to channels first.
     rectified_panos_cf = rectified_panos.permute((0, 1, 4, 2, 3))
@@ -1962,7 +1964,7 @@ class FullPipeline(nn.Module):
       m_trans = (trans[i, 0] - trans[i, 1]).cpu().numpy()
       m_trans = m_trans / np.linalg.norm(m_trans)
       m_ang = np.arccos(
-        -m_trans[2] / np.linalg.norm(m_trans[[0, 2]])) * np.sign(-m_trans[0])
+        -m_trans[2] / np.linalg.norm(m_trans[[0, 2]])) * (2 * (-m_trans[0] > 0) - 1)
       # print("Angle", m_trans, np.rad2deg(m_ang))
       m_rot_fw = my_helpers.rotate_around_axis(np.array([0, 1, 0]), m_ang)
       rot_fw.append(
