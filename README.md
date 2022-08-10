@@ -26,3 +26,17 @@ Currently, the main scripts are:
 
 ## Acknowledgements
 Some code in this repo is borrowed from [facebookresearch/synsin](https://github.com/facebookresearch/synsin) and [nianticlabs/monodepth2](https://github.com/nianticlabs/monodepth2).
+
+## Reference
+If you use this in your research, please reference it as:
+```bibtex
+@INPROCEEDINGS{Li2022Omnisyn,
+  author={Li, David and Zhang, Yinda and H\"{a}ne, Christian and Tang, Danhang and Varshney, Amitabh and Du, Ruofei},
+  booktitle={2022 IEEE Conference on Virtual Reality and 3D User Interfaces Abstracts and Workshops (VRW)}, 
+  title={{OmniSyn}: Synthesizing 360 Videos with Wide-baseline Panoramas}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={670-671},
+  doi={10.1109/VRW55335.2022.00186}}
+```
