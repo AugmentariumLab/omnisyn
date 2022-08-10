@@ -87,7 +87,7 @@ class App:
                          monodepth_model=args.model_name,
                          width=args.width,
                          height=args.height,
-                         layers=7,
+                         layers=5,
                          raster_resolution=args.width,
                          point_radius=args.point_radius,
                          depth_input_images=1,
