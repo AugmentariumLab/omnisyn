@@ -18,7 +18,8 @@
 
   <!-- Bootstrap core CSS -->
   <!-- <link rel="icon" type="image/png" href="images/sphere_tracing.png"> -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+    integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <!-- Custom styles for this template -->
   <!-- <link href="css/distRenderer.css" rel="stylesheet"> -->
   <base target="_blank">
@@ -33,43 +34,9 @@
 
     @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600,700");
 
-    /* Elements */
-
-    /*body {
-    margin: 0;
-    background-color: #2e2e2e;
-}
-
-h1 {
-    color: #fff;
-    font-family: 'Open Sans', arial, sans-serif;
-}
-h2 {
-    color: #fff;
-    font-family: 'Open Sans', arial, sans-serif;
-}
-h3 {
-    color: #fff;
-    font-family: 'Open Sans', arial, sans-serif;
-}
-
-p {
-    font-family: 'Open Sans', arial, sans-serif;
-}
-
-a {
-  color : #ADD8FF;
-}
-
-td {
-    text-align: center;
-    color: #fff;
-}
-
-td > p {
-    margin-bottom: 5px;
-    margin-top: 0;
-}*/
+    h2 {
+      text-align: center;
+    }
 
     /* IDs */
 
@@ -330,6 +297,10 @@ td > p {
     .img_link {
       position: relative;
     }
+
+    .table_header td {
+      text-align: center;
+    }
   </style>
 
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -362,40 +333,42 @@ td > p {
 
   <br><br>
   <div class="container" style="padding-top: 80px; font-size: 20px">
-    <div align="center">
-      <h1 class="text-center" align="center" style="font-size: 50px">
-        OmniSyn: Synthesizing 360 Videos with Wide-baseline Panoramas
-      </h1><br>
-
-      <br><br>
-    </div>
+    <h1 class="text-center" style="font-size: 50px">
+      OmniSyn: Synthesizing 360 Videos with Wide-baseline Panoramas
+    </h1><br>
   </div><br>
 
   <!-- Teaser -->
   <div class="container" style="padding-top: 20px; font-size: 20px">
-    <div align="center">
-      <div class="center">
-        <img class="img-responsive img-rounded" src="figure/teaser.png" style="width:100%" alt="">
-      </div>
-      <br>
+    <div class="center">
+      <img class="img-responsive img-rounded" src="figure/teaser.png" style="width:100%" alt="">
     </div>
+    <br>
   </div><br>
 
   <!-- Abstract -->
   <div class="container">
     <hr>
     <br>
-    <center>
-      <h2 id="Abstract" style="padding-top: 80px; margin-top: -80px;">Abstract</h2>
-    </center>
+    <h2 id="Abstract" style="padding-top: 80px; margin-top: -80px;">Abstract</h2>
     <br>
 
     <p style="font-size: 20px">
-      Immersive maps such as Google Street View and Bing Streetside provide true-to-life views with a massive collection of panoramas. However, these panoramas are only available at sparse intervals along the path they are taken, resulting in visual
-      discontinuities during navigation. Prior art in view synthesis is usually built upon a set of perspective images, a pair of stereoscopic images, or a monocular image, but barely examines wide-baseline panoramas, which are widely adopted in
-      commercial platforms to optimize bandwidth and storage usage. In this paper, we leverage the unique characteristics of wide-baseline panoramas and present OmniSyn, a novel pipeline for 360° view synthesis between wide-baseline panoramas.
-      OmniSyn predicts omnidirectional depth maps using a spherical cost volume and a monocular skip, renders meshes in 360° images, and synthesizes intermediate views with a fusion network. We demonstrate the effectiveness of OmniSyn via
-      comprehensive experimental results including comparison with the state-of-the-art methods on CARLA and Matterport datasets, ablation studies, and generalization studies on street views. We envision our work may inspire future research for this
+      Immersive maps such as Google Street View and Bing Streetside provide true-to-life views with a massive collection
+      of panoramas. However, these panoramas are only available at sparse intervals along the path they are taken,
+      resulting in visual
+      discontinuities during navigation. Prior art in view synthesis is usually built upon a set of perspective images,
+      a pair of stereoscopic images, or a monocular image, but barely examines wide-baseline panoramas, which are widely
+      adopted in
+      commercial platforms to optimize bandwidth and storage usage. In this paper, we leverage the unique
+      characteristics of wide-baseline panoramas and present OmniSyn, a novel pipeline for 360° view synthesis between
+      wide-baseline panoramas.
+      OmniSyn predicts omnidirectional depth maps using a spherical cost volume and a monocular skip, renders meshes in
+      360° images, and synthesizes intermediate views with a fusion network. We demonstrate the effectiveness of OmniSyn
+      via
+      comprehensive experimental results including comparison with the state-of-the-art methods on CARLA and Matterport
+      datasets, ablation studies, and generalization studies on street views. We envision our work may inspire future
+      research for this
       unheeded real-world task and eventually produce a smoother experience for navigating immersive maps.
     </p>
   </div><br>
@@ -404,112 +377,107 @@ td > p {
   <div class='container'>
     <hr>
     <br>
-    <center>
-      <h2 id="Paper" style="padding-top: 80px; margin-top: -80px">Paper</h2>
-    </center>
-    <br>
+    <h2 id="Paper" style="padding-top: 80px; margin-top: -80px">Paper</h2>
     <div class="paper">
       <div class="paper-grid-container">
         <div class="item1"><a href="figure/VR2022_OmniSyn_Poster.pdf">
-          <img src="figure/vr-1.png" class="paper-thumbnail"><br>
-          2-page Abstract
-        </a></div>
+            <img src="figure/vr-1.png" class="paper-thumbnail"><br>
+            2-page Abstract
+          </a></div>
         <div class="item1"><a href="https://arxiv.org/abs/2202.08752">
-          <img src="figure/arxiv-01.png" class="paper-thumbnail"><br>
-          Manuscript
-        </a></div>
+            <img src="figure/arxiv-01.png" class="paper-thumbnail"><br>
+            Manuscript
+          </a></div>
       </div>
     </div>
   </div>
-    <!-- <center>
-      <h2 id="Supplementary" style="padding-top: 80px; margin-top: -80px">Supplementary</h2>
-    </center>
-    <br>
-    -->
-    <!-- <div class='container' style="width: 60%">
-    <ul>
-    </ul>
-    </div>
-    </div> -->
-    <!-- <br> -->
 
-    <!-- Result -->
-    <!-- <div class='video'> -->
-      <!-- <hr> -->
-      <!-- <br> -->
-      <!-- <center>
-        <h2 id="Results" style="padding-top: 80px; margin-top: -80px">More Results</h2>
-        <br>
-        <p style="font-size: 20px">3D photo results. Download video (56M) <a href="readme_files/Du2Net.mp4">here</a>.</p>
-        <div class="opacity-off">
-        <iframe width='1000px' height='575px' src="https://www.youtube.com/embed/YbjqjaM3NO4" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </center> -->
-    <!-- </div><br> -->
-
-    <!-- Examples -->
-    <div class='container'>
-      <hr>
-      <br>
-      <center>
-        <h2 id="Examples" style="padding-top: 80px; margin-top: -80px">Collected Examples</h2>
-        <br>
-
-        <table class="comparison_table" border="1px" cellspacing="3">
-          <tr class="table_header">
-            <td align="center">
-              <p>Ground Truth 0</p>
-            </td>
-            <td align="center">
-              <p>Ground Truth 1 (6 meters)</p>
-            </td>
-            <td align="center">
-              <p>OmniSyn (Mesh) Output</p>
-            </td>
-          </tr>
-          <tr>
-            <td> <a> <img src="readme_files/input0/4.png" class="erp_image" draggable="false"> </a> </td>
-            <td> <a> <img src="readme_files/input1/4.png" class="erp_image" draggable="false" /> </a> </td>
-            <td class="img_link"> <a> <img src="readme_files/omnisyn/4.gif" class="erp_image" draggable="false" /> </a> </td>
-          </tr>
-          <tr>
-            <td> <a> <img src="readme_files/input0/5.png" class="erp_image" draggable="false"> </a> </td>
-            <td> <a> <img src="readme_files/input1/5.png" class="erp_image" draggable="false" /> </a> </td>
-            <td class="img_link"> <a> <img src="readme_files/omnisyn/5.gif" class="erp_image" draggable="false" /> </a> </td>
-          </tr>
-          <tr>
-            <td> <a> <img src="readme_files/input0/1.png" class="erp_image" draggable="false"> </a> </td>
-            <td> <a> <img src="readme_files/input1/1.png" class="erp_image" draggable="false" /> </a> </td>
-            <td class="img_link"> <a> <img src="readme_files/omnisyn/1.gif" class="erp_image" draggable="false" /> </a> </td>
-          </tr>
-          <tr>
-            <td> <a> <img src="readme_files/input0/2.png" class="erp_image" draggable="false"> </a> </td>
-            <td> <a> <img src="readme_files/input1/2.png" class="erp_image" draggable="false" /> </a> </td>
-            <td class="img_link"> <a> <img src="readme_files/omnisyn/2.gif" class="erp_image" draggable="false" /> </a> </td>
-          </tr>
-          <tr>
-            <td> <a> <img src="readme_files/input0/3.png" class="erp_image" draggable="false"> </a> </td>
-            <td> <a> <img src="readme_files/input1/3.png" class="erp_image" draggable="false" /> </a> </td>
-            <td class="img_link"> <a> <img src="readme_files/omnisyn/3.gif" class="erp_image" draggable="false" /> </a> </td>
-          </tr>
-          <tr>
-            <td> <a> <img src="readme_files/input0/6.png" class="erp_image" draggable="false"> </a> </td>
-            <td> <a> <img src="readme_files/input1/6.png" class="erp_image" draggable="false" /> </a> </td>
-            <td class="img_link"> <a> <img src="readme_files/omnisyn/6.gif" class="erp_image" draggable="false" /> </a> </td>
-          </tr>
-        </table>
-      </center>
-    </div>
+  <!-- Examples -->
+  <div class='container'>
     <hr>
-  </div><br>
+    <br>
+    <h2 id="Examples" style="padding-top: 80px; margin-top: -80px">Collected Examples</h2>
+    <br>
 
-  <hr>
+    <table class="comparison_table" cellspacing="3">
+      <tr class="table_header">
+        <td>
+          <p>Ground Truth 0</p>
+        </td>
+        <td>
+          <p>Ground Truth 1 (6 meters)</p>
+        </td>
+        <td>
+          <p>OmniSyn (Mesh) Output</p>
+        </td>
+      </tr>
+      <tr>
+        <td> <a> <img src="readme_files/input0/4.png" class="erp_image" draggable="false"> </a> </td>
+        <td> <a> <img src="readme_files/input1/4.png" class="erp_image" draggable="false" /> </a> </td>
+        <td class="img_link"> <a> <img src="readme_files/omnisyn/4.gif" class="erp_image" draggable="false" /> </a>
+        </td>
+      </tr>
+      <tr>
+        <td> <a> <img src="readme_files/input0/5.png" class="erp_image" draggable="false"> </a> </td>
+        <td> <a> <img src="readme_files/input1/5.png" class="erp_image" draggable="false" /> </a> </td>
+        <td class="img_link"> <a> <img src="readme_files/omnisyn/5.gif" class="erp_image" draggable="false" /> </a>
+        </td>
+      </tr>
+      <tr>
+        <td> <a> <img src="readme_files/input0/1.png" class="erp_image" draggable="false"> </a> </td>
+        <td> <a> <img src="readme_files/input1/1.png" class="erp_image" draggable="false" /> </a> </td>
+        <td class="img_link"> <a> <img src="readme_files/omnisyn/1.gif" class="erp_image" draggable="false" /> </a>
+        </td>
+      </tr>
+      <tr>
+        <td> <a> <img src="readme_files/input0/2.png" class="erp_image" draggable="false"> </a> </td>
+        <td> <a> <img src="readme_files/input1/2.png" class="erp_image" draggable="false" /> </a> </td>
+        <td class="img_link"> <a> <img src="readme_files/omnisyn/2.gif" class="erp_image" draggable="false" /> </a>
+        </td>
+      </tr>
+      <tr>
+        <td> <a> <img src="readme_files/input0/3.png" class="erp_image" draggable="false"> </a> </td>
+        <td> <a> <img src="readme_files/input1/3.png" class="erp_image" draggable="false" /> </a> </td>
+        <td class="img_link"> <a> <img src="readme_files/omnisyn/3.gif" class="erp_image" draggable="false" /> </a>
+        </td>
+      </tr>
+      <tr>
+        <td> <a> <img src="readme_files/input0/6.png" class="erp_image" draggable="false"> </a> </td>
+        <td> <a> <img src="readme_files/input1/6.png" class="erp_image" draggable="false" /> </a> </td>
+        <td class="img_link"> <a> <img src="readme_files/omnisyn/6.gif" class="erp_image" draggable="false" /> </a>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="container">
+    <hr>
+    <h2>Reference</h2>
+    <pre>
+      @INPROCEEDINGS{Li2022Omnisyn,
+        author={Li, David and Zhang, Yinda and H\"{a}ne, Christian and Tang, Danhang and Varshney, Amitabh and Du, Ruofei},
+        booktitle={2022 IEEE Conference on Virtual Reality and 3D User Interfaces Abstracts and Workshops (VRW)}, 
+        title={{OmniSyn}: Synthesizing 360 Videos with Wide-baseline Panoramas}, 
+        year={2022},
+        volume={},
+        number={},
+        pages={670-671},
+        doi={10.1109/VRW55335.2022.00186}
+      }
+    </pre>
+    <hr>
+  </div>
 
   <!-- Bootstrap core JavaScript -->
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+    integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+    integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
