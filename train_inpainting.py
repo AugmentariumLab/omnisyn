@@ -1276,12 +1276,12 @@ class App:
       cubemap_side = 2
 
       # Do a run through validation data.
-      for k in range(150):
+      for k in range(15):
         output_dir = my_helpers.join_and_make(args.inpaint_checkpoints_dir,
                                               'single_path_%d' % k)
         instance = dataset[k]
-        if k not in [2, 79]:
-          continue
+        # if k not in [0,1,2,3,4, 79]:
+        #   break
         panos = torch.tensor(instance['rgb_panos'], device=args.device,
                              dtype=torch.float32)[None]
         rotations = torch.tensor(instance['rots'], device=args.device,
