@@ -1730,7 +1730,7 @@ class App:
       pano_0_positions = my_torch_helpers.spherical_to_cartesian(theta, phi, depth0)
       pano_0_positions = pano_0_positions.reshape(height * width, 3) - trans[0, 0][None]
       pano_0_positions = pano_0_positions.cpu().numpy()
-      pano_0_colors = panos_small[0, 1].reshape(height * width, 3).cpu().numpy()
+      pano_0_colors = panos_small[0, 0].reshape(height * width, 3).cpu().numpy()
       point_cloud_0 = o3d.geometry.PointCloud()
       point_cloud_0.points = o3d.utility.Vector3dVector(pano_0_positions)
       point_cloud_0.colors = o3d.utility.Vector3dVector(pano_0_colors)
