@@ -24,6 +24,10 @@ Currently, the main scripts are:
 * `train_depth.py` which trains the depth estimator only.
 * `train_inpainting.py` to train the inpainting component.
 
+## Notes
+Our pretrained carla model uses an older version of PyTorch3D. \
+`pip install git+https://github.com/facebookresearch/pytorch3d.git@07d7e12644ee48ea0b544c07becacdafe93c260a`
+
 ## Acknowledgements
 Some code in this repo is borrowed from [facebookresearch/synsin](https://github.com/facebookresearch/synsin) and [nianticlabs/monodepth2](https://github.com/nianticlabs/monodepth2).
 
