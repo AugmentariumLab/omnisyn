@@ -765,6 +765,9 @@ class App:
     Returns:
 
     """
+    if self.args.dataset == "m3d":
+      return self.run_inpainting_m3d()
+
     args = self.args
     train_dataloader = self.train_data_loader
     depth_model = self.depth_model
@@ -1010,10 +1013,70 @@ class App:
       make_gif_args = [
         "ffmpeg",
         "-i", os.path.join(runs_temp_dir, "%d.png"),
+        "-filter_complex", "scale=512:256,split=2[v1][v2];[v1]palettegen=stats_mode=full[palette];[v2][palette]paletteuse=dither=sierra2_4a",
         os.path.join(runs_dir, "%d.gif" % i),
         "-y"
       ]
       subprocess.run(make_gif_args)
+
+  def run_inpainting_m3d(self):
+    args = self.args
+    dataset = HabitatImageGenerator(
+      "test",
+      full_width=self.full_width,
+      full_height=self.full_height,
+      seq_len=3,
+      reference_idx=1,
+      m3d_dist=1 / 2
+    )
+
+    num_frames = 60
+    output_dir = my_helpers.join_and_make(args.inpaint_checkpoints_dir,
+                                          'gifs')
+    temp_output_dir = my_helpers.join_and_make(args.inpaint_checkpoints_dir,
+                                          'temp')
+
+    # Do a run through validation data.
+    for k in range(15):
+      instance = dataset[k]
+      panos = torch.tensor(instance['rgb_panos'], device=args.device,
+                            dtype=torch.float32)[None]
+      rotations = torch.tensor(instance['rots'], device=args.device,
+                                dtype=torch.float32)[None]
+      translations = torch.tensor(instance['trans'], device=args.device,
+                                  dtype=torch.float32)[None]
+      depths = torch.tensor(instance['depth_panos'], device=args.device,
+                            dtype=torch.float32)[None]
+      print("dataset", panos.shape)
+
+      assert args.use_pred_depth, "Not using predicted depth"
+      translations_diff = translations[:, 0] - translations[:, 2]
+
+      for i in range(1, num_frames+1):
+        indices = [0, 1, 2]
+        t = 1 - i / (num_frames+1)
+        new_translations = torch.stack((
+          translations[:, 0] + t * translations_diff - translations[:, 0],
+          translations[:, 1] + t * translations_diff - translations[:, 0],
+          translations[:, 2] + t * translations_diff - translations[:, 0]
+        ), dim=1)
+        with torch.no_grad():
+          run_outputs = self.run_inpainting_mesh_carla(
+            100000,
+            panos[:, indices],
+            rotations[:, indices],
+            new_translations,
+            depths[:, indices]
+          )
+        inpainted_image = run_outputs['inpainted_image']
+        my_torch_helpers.save_torch_image(
+          os.path.join(temp_output_dir, "pred_%d.png" % i),
+          inpainted_image)
+      subprocess.run(["ffmpeg", "-i", os.path.join(temp_output_dir, "pred_%d.png"),
+                      "-filter_complex", 
+                      "split=2[v1][v2];[v1]palettegen=stats_mode=full[palette];[v2][palette]paletteuse=dither=sierra2_4a",
+                      "-y", os.path.join(output_dir, "pred_%d.gif" % k)])
+
 
   def run_inpainting_single(self):
     """Run the inpainting network to generate GIFs.
