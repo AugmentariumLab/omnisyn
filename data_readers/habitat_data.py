@@ -339,7 +339,7 @@ class HabitatImageGenerator(torch.utils.data.Dataset):
     self.split = split
     opts = ArgumentParser().parse(arg_str="")[0]
     opts.train_data_path = (
-      "./data_readers/scene_episodes/mp3d_test/dataset_one_ep_per_scene.json.gz"
+      "./data_readers/scene_episodes/mp3d_train/dataset_one_ep_per_scene.json.gz"
     )
     opts.val_data_path = (
       "./data_readers/scene_episodes/mp3d_val/dataset_one_ep_per_scene.json.gz"
@@ -378,6 +378,7 @@ class HabitatImageGenerator(torch.utils.data.Dataset):
     return 2 ** 31
 
   def __restart__(self):
+    print("-----SPLIT_____" + self.split)
     if self.vectorize:
       self.image_generator = RandomImageGenerator(
         self.split,
