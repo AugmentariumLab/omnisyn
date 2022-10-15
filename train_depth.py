@@ -191,13 +191,13 @@ class App:
     elif args.dataset == "m3d":
       if args.script_mode == "eval_depth_test":
         val_data = HabitatImageGenerator(
-          "val",
+          "test",
           full_width=self.full_width,
           full_height=self.full_height,
           m3d_dist=args.m3d_dist)
       else:
         val_data = HabitatImageGenerator(
-          "test",
+          "val",
           full_width=self.full_width,
           full_height=self.full_height,
           m3d_dist=args.m3d_dist)
