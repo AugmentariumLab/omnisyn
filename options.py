@@ -297,4 +297,12 @@ def parse_training_options():
                       type=my_helpers.str2bool,
                       help='predict discontinuities for mesh cutss',
                       default=False)
+  parser.add_argument('--train-depth-steps',
+                      type=int,
+                      help='',
+                      default=90600)
+  parser.add_argument('--train-inpainting-steps',
+                      type=int,
+                      help='',
+                      default=45200)
   return parser.parse_args()

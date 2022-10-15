@@ -765,9 +765,14 @@ class App:
     optimizer = self.optimizer
     checkpoint_manager = self.checkpoint_manager
     model = self.model
+    step = 0
 
     for epoch in range(args.epochs):
+      if step > args.train_depth_steps:
+        break
       for i, data in enumerate(train_dataloader):
+        if step > args.train_depth_steps:
+          break
         optimizer.zero_grad()
         step = checkpoint_manager.increment_step()
 

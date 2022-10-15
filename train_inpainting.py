@@ -727,9 +727,14 @@ class App:
 
   def run_training_loop(self):
     args = self.args
+    step = 0
 
     for epoch in range(args.epochs):
+      if step > args.train_inpainting_steps:
+        break
       for i, data in enumerate(self.train_data_loader):
+        if step > args.train_inpainting_steps:
+          break
         self.optimizer.zero_grad()
         step = self.inpainting_checkpoint_manager.increment_step()
 
