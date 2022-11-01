@@ -129,7 +129,7 @@ class RandomImageGenerator(object):
       opts.scenes_dir,
     )
     data_dir = os.path.join(
-      "data/scene_episodes/", unique_dataset_name + "_" + split
+      "data_readers/scene_episodes/", unique_dataset_name + "_" + split
     )
     self.dataset_name = config.DATASET.TYPE
     print(data_dir)
@@ -139,6 +139,8 @@ class RandomImageGenerator(object):
     # Creates a dataset where each episode is a random spawn point in each scene.
     print("One ep per scene", flush=True)
     if not (os.path.exists(data_path)):
+      print("Did not find dataset at", data_path, flush=True)
+      exit(1)
       print("Creating dataset...", flush=True)
       dataset = make_dataset(config.DATASET.TYPE, config=config.DATASET)
       # Get one episode per scene in dataset
