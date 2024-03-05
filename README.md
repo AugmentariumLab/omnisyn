@@ -13,9 +13,9 @@ OmniSyn predicts depth from two panoramas and then renders meshes using PyTorch3
     pip install -r requirements.txt
     conda install habitat-sim=0.1.6 headless -c conda-forge -c aihabitat
     ```
-2. Download [our processed CARLA dataset](https://drive.google.com/drive/folders/1UXzWGIpEPlLVhf9t0LJ0VPiAq7wYpudC?usp=sharing).
+2. Download [our processed CARLA dataset](https://obj.umiacs.umd.edu/dli-omnisyn-public/index.html).
 
-3. Download [our CARLA model weights](https://drive.google.com/drive/folders/1p5XrgGdqdc3TSB41GcacYyTpnDF5NhIV?usp=sharing) to `example/` and run our selected example to check everything is working.
+3. Download [our CARLA model weights](https://obj.umiacs.umd.edu/dli-omnisyn-public/index.html) to `example/` and run our selected example to check everything is working.
     ```shell
     python train_inpainting.py -c example/config_example.txt
     ```
